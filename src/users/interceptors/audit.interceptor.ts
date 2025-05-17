@@ -1,11 +1,13 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Logger } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
+	private readonly logger = new Logger(AuditInterceptor.name); 
+
 	intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
 		const req = context.switchToHttp().getRequest();
-		
+
 		const log = {
 			userId: req.user?.id,
 			ip: req.ip,
@@ -16,8 +18,8 @@ export class AuditInterceptor implements NestInterceptor {
 
 		return next.handle().pipe(
 			tap({
-				next: () => console.log({ ...log, status: 'SUCCESS' }),
-				error: (err) => console.log({ ...log, status: 'FAILURE', reason: err.message }),
+				next: () => this.logger.log({ ...log, status: 'SUCCESS' }), // Use Logger
+				error: (err) => this.logger.error({ ...log, status: 'FAILURE', reason: err.message }), // Use Logger
 			})
 		);
 	}

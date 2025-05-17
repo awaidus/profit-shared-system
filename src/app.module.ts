@@ -6,6 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { Logger } from 'nestjs-pino';
+import { LoggerModule } from 'nestjs-pino';
+
 
 @Module({
 	imports: [
@@ -15,6 +18,22 @@ import { APP_GUARD } from '@nestjs/core';
 				limit: 3, // 3 request per ip per minute
 			},
 		]),
+		
+
+		LoggerModule.forRoot({
+			pinoHttp: {
+				level: 'info', // 'info', 'debug', 'error'
+				transport: {
+					target: 'pino-pretty', 
+					options: {
+						colorize: true,
+						translateTime: 'SYS:yyyy-mm-dd HH:MM:ss', // Human-readable timestamps
+					},
+				},
+			
+			},
+		}),
+
 		UsersModule,
 		AuthModule,
 		DatabaseModule,
