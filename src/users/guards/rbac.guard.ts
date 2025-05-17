@@ -3,9 +3,10 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 @Injectable()
 export class RbacGuard implements CanActivate {
 	canActivate(ctx: ExecutionContext): boolean {
-		const request = ctx.switchToHttp().getRequest();
-		if (request.user.role !== 'user') {
-			throw new ForbiddenException('Only users with role `user` can update profile.');
+		const req = ctx.switchToHttp().getRequest();
+
+		if (req.user?.role !== 'user') {
+			throw new ForbiddenException('Only role "user" is allowed');
 		}
 		return true;
 	}
