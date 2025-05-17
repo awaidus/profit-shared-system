@@ -8,7 +8,7 @@ export class JwtAuthGuard implements CanActivate {
 		// TODO: For testing
 		req.user = {
 			id: 1,
-			role: 'admin',
+			role: 'user',
 		};
 
 		return true;
