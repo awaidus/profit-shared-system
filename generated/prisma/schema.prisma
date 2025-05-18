@@ -15,8 +15,12 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(60)
-  bio  String @db.VarChar(250)
-  role String
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(60)
+  email     String   @unique
+  password  String
+  bio       String   @db.VarChar(250)
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

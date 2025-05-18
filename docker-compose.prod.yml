@@ -20,22 +20,17 @@ services:
   api:
     build:
       context: .
-      target: development  # Multi-stage Dockerfile target
+      target: production
     container_name: nest_api
     restart: unless-stopped
     ports:
       - '8000:8000'
-      - '9229:9229'  # For debugging
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules  # Keep node_modules in container
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/testdb?schema=public
+      NODE_ENV: production
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/testdb?schema=public
-      NODE_ENV: development
-    command: npm run start:dev  # Enable hot-reload
 
 volumes:
   postgres_data:

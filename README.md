@@ -34,17 +34,17 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-
 ## Docker Setup
+
 ```bash
-# docker up and running 
-$ docker-compose build 
-$ docker-compose up
+# for development
+$ docker-compose up --build
 
-# how to find docker image name 
-$ docker ps
-# could be something like profit-shared-system-api-1
+# for production
+$ docker-compose -f docker-compose.prod.yml up --build
 
-# run this command in another terminal 
-$ docker exec -it YOUR-DOCKER-IMAGE-NAME npx prisma db push
+
+# run this command in another terminal (if db not sync)
+$ docker-compose exec api npx prisma generate
+$ docker-compose exec api npx prisma migrate dev
 ```
